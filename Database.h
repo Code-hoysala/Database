@@ -3,28 +3,37 @@
 
 #include <Arduino.h>
 
-#define MAX_RECORDS 8
-#define MAX_KEY_LEN 16
-#define MAX_VAL_LEN 64
+#ifndef MAX_RECORDS
+#define MAX_RECORDS 16
+#endif
 
-struct DatabaseRecord {
+#ifndef MAX_KEY_LEN
+#define MAX_KEY_LEN 24
+#endif
+
+#ifndef MAX_VAL_LEN
+#define MAX_VAL_LEN 128
+#endif
+
+struct KeyValuePair {
     char key[MAX_KEY_LEN];
     char value[MAX_VAL_LEN];
+    bool isUsed;
 };
 
 class Database {
 public:
     Database();
-    
-    bool begin();
+    void begin();
     bool insert(const char* key, const char* value);
-    bool get(const char* key, char* buffer, size_t maxLen);
+    bool get(const char* key, char* buffer, size_t bufferSize) const;
     void clear();
-    uint8_t getCount();
+    size_t count() const;
+    void loadPackage(uint8_t packageId);
 
 private:
-    DatabaseRecord _records[MAX_RECORDS];
-    uint8_t _count;
+    KeyValuePair records[MAX_RECORDS];
+    size_t recordCount;
 };
 
 #endif
