@@ -1,0 +1,133 @@
+#include <Database.h>
+
+Database akinatorPkg;
+
+Database pkgScience;
+Database pkgLiterature;
+Database pkgHistory;
+Database pkgTechnology;
+Database pkgPhilosophy;
+Database pkgArt;
+Database pkgMusic;
+Database pkgGeography;
+Database pkgBiographies;
+Database pkgInventions;
+Database pkgMathematics;
+Database pkgPhysics;
+Database pkgChemistry;
+Database pkgBiology;
+Database pkgArchitecture;
+Database pkgMythology;
+Database pkgCinema;
+Database pkgLinguistics;
+Database pkgEconomics;
+Database pkgSociology;
+Database pkgMedicine;
+Database pkgEnvironment;
+Database pkgCulture;
+Database pkgAstronomy;
+
+void initializeDatabases();
+void runAkinatorGame();
+void queryEncyclopedia(Database &pkg, const char* key);
+
+void setup() {
+    Serial.begin(9600);
+    while (!Serial);
+
+    initializeDatabases();
+
+    Serial.println(F("=========================================="));
+    Serial.println(F("       EMBEDDED KNOWLEDGE SYSTEM          "));
+    Serial.println(F("=========================================="));
+    Serial.println(F("[1] Play Akinator (Fictional Characters)"));
+    Serial.println(F("[2] Query Encyclopedia Reference"));
+    Serial.println(F("------------------------------------------"));
+}
+
+void loop() {
+    if (Serial.available() > 0) {
+        char mode = Serial.read();
+        
+        while (Serial.available() > 0) Serial.read();
+
+        if (mode == '1') {
+            runAkinatorGame();
+        } else if (mode == '2') {
+            char buffer[128];
+            if (pkgScience.get("einstein", buffer, sizeof(buffer))) {
+                Serial.print(F("\n[Science Query - Einstein]: "));
+                Serial.println(buffer);
+            } else {
+                Serial.println(F("\nRecord not found in database."));
+            }
+        }
+        
+        Serial.println(F("\nSelect mode: [1] Akinator [2] Encyclopedia"));
+    }
+}
+
+void initializeDatabases() {
+    akinatorPkg.begin();
+    pkgScience.begin();
+    pkgLiterature.begin();
+    pkgHistory.begin();
+    pkgTechnology.begin();
+    pkgPhilosophy.begin();
+    pkgArt.begin();
+    pkgMusic.begin();
+    pkgGeography.begin();
+    pkgBiographies.begin();
+    pkgInventions.begin();
+    pkgMathematics.begin();
+    pkgPhysics.begin();
+    pkgChemistry.begin();
+    pkgBiology.begin();
+    pkgArchitecture.begin();
+    pkgMythology.begin();
+    pkgCinema.begin();
+    pkgLinguistics.begin();
+    pkgEconomics.begin();
+    pkgSociology.begin();
+    pkgMedicine.begin();
+    pkgEnvironment.begin();
+    pkgCulture.begin();
+    pkgAstronomy.begin();
+
+    akinatorPkg.insert("q1", "Does your character wear a high-tech armored suit? (y/n)");
+    akinatorPkg.insert("q2", "Does your character have a lightning bolt scar? (y/n)");
+    akinatorPkg.insert("iron_man", "Tony Stark - Billionaire industrialist and Avenger.");
+    akinatorPkg.insert("spider_man", "Peter Parker - Wall-crawling superhero.");
+    akinatorPkg.insert("harry_potter", "The Boy Who Lived and wizard of Hogwarts.");
+
+    pkgScience.insert("einstein", "Albert Einstein formulated the theory of relativity (E=mc^2).");
+    pkgLiterature.insert("shakespeare", "English playwright and poet known for Hamlet and Macbeth.");
+    pkgHistory.insert("caesar", "Roman general and statesman who shaped the Roman Republic.");
+    pkgTechnology.insert("turing", "Father of modern computer science and artificial intelligence.");
+}
+
+void runAkinatorGame() {
+    char buffer[128];
+    char answer[4];
+
+    Serial.println(F("\n--- STARTING AKINATOR (FICTIONAL CHARACTERS) ---"));
+    
+    if (akinatorPkg.get("q1", buffer, sizeof(buffer))) {
+        Serial.println(buffer);
+        while (Serial.available() == 0);
+        int len = Serial.readBytesUntil('\n', answer, sizeof(answer) - 1);
+        answer[len] = '\0';
+
+        if (answer[0] == 'y' || answer[0] == 'Y') {
+            if (akinatorPkg.get("iron_man", buffer, sizeof(buffer))) {
+                Serial.print(F("Match Found: "));
+                Serial.println(buffer);
+            }
+        } else {
+            if (akinatorPkg.get("harry_potter", buffer, sizeof(buffer))) {
+                Serial.print(F("Match Found: "));
+                Serial.println(buffer);
+            }
+        }
+    }
+}
