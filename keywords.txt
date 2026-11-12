@@ -1,12 +1,11 @@
-# Syntax coloring for Database library
-
-# Datatypes / Classes (KEYWORD1)
+# Datatypes (KEYWORD1)
 Database	KEYWORD1
-DatabaseRecord	LITERAL1
+KeyValuePair	KEYWORD1
 
-# Methods / Functions (KEYWORD2)
+# Methods and Functions (KEYWORD2)
 begin	KEYWORD2
 insert	KEYWORD2
 get	KEYWORD2
 clear	KEYWORD2
-getCount	KEYWORD2
+count	KEYWORD2
+loadPackage	KEYWORD2
